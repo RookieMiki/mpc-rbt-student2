@@ -13,9 +13,6 @@ KeyboardControlNode::KeyboardControlNode() : rclcpp::Node("keyboard_control_node
     this->declare_parameter("linear_speed", 0.5);
     this->declare_parameter("angular_speed", 0.5);
 
-    linear_speed_ = this->get_parameter("linear_speed").as_double();
-    angular_speed_ = this->get_parameter("angular_speed").as_double();
-
     twist_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
 
     timer_ = this->create_wall_timer(10ms, std::bind(&KeyboardControlNode::timerCallback, this));
@@ -29,6 +26,7 @@ KeyboardControlNode::KeyboardControlNode() : rclcpp::Node("keyboard_control_node
 
     RCLCPP_INFO(get_logger(), "Keyboard Control node started.");
     RCLCPP_INFO(get_logger(), "Use arrow keys to control robot.");
+    RCLCPP_INFO(get_logger(), "Speed range: 0.0 to 1.5");
 }
 
 KeyboardControlNode::~KeyboardControlNode() {
@@ -36,6 +34,15 @@ KeyboardControlNode::~KeyboardControlNode() {
 }
 
 void KeyboardControlNode::timerCallback() {
+    linear_speed_ = this->get_parameter("linear_speed").as_double();
+    angular_speed_ = this->get_parameter("angular_speed").as_double();
+
+    if (linear_speed_ < 0.0) linear_speed_ = 0.0;
+    if (linear_speed_ > 1.5) linear_speed_ = 1.5;
+
+    if (angular_speed_ < 0.0) angular_speed_ = 0.0;
+    if (angular_speed_ > 1.5) angular_speed_ = 1.5;
+
     geometry_msgs::msg::Twist twist{};
     char c;
 
