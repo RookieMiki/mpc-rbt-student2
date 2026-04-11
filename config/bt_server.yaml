@@ -1,0 +1,9 @@
+bt_server:
+  ros__parameters:
+    tick_frequency: 30
+    groot2_port: 1667
+    ros_plugins_timeout: 5000
+    plugins:
+      - mpc_rbt_student/bt_plugins
+    behavior_trees:
+      - mpc_rbt_student/behavior_trees
