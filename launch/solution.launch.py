@@ -25,7 +25,7 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}]
     )
 
-    # NOVÝ: Uzel pro řízení pohybu (Motion Control)
+    # Uzel pro řízení pohybu (Motion Control)
     motion_control_node = Node(
         package='mpc_rbt_student',
         executable='motion_control', 
@@ -56,14 +56,37 @@ def generate_launch_description():
             'use_sim_time': True
         }]
     )
+
+    # PŘESUNUTO SEM DOVNITŘ: Warehouse manager
+    warehouse_manager = Node(
+        package='mpc_rbt_student', # Opraveno ze 'solution' na 'student'
+        executable='warehouse_manager',
+        name='warehouse_manager',
+        output='screen',
+        parameters=[{'use_sim_time': True}]
+    )
+
+    # PŘESUNUTO SEM DOVNITŘ: Behavior Tree server
+    bt_server = Node(
+        package='mpc_rbt_student', # Opraveno ze 'solution' na 'student'
+        executable='bt_server',
+        name='bt_server',
+        output='screen',
+        parameters=[
+            {'use_sim_time': True},
+            os.path.join(package_dir, 'config', 'bt_server.yaml')
+        ]
+    )
     
-    # Tady ROSu říkáme, co všechno má reálně spustit
+    # Tady ROSu říkáme, co všechno má reálně spustit (přidány nové uzly nakonec)
     return LaunchDescription([
         localization_node,
         planning_node,   
         motion_control_node,
         rviz_node,
         keyboard_node,
+        warehouse_manager,
+        bt_server,
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',

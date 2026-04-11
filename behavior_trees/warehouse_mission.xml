@@ -1,29 +1,34 @@
 <root BTCPP_format="4">
-
-  <BehaviorTree ID="WarehouseMission">
-    <Sequence name="main_mission">
-
-      <!-- 1. Vyžádejte si pickup task od warehouse manageru -->
-      <GetTaskService service_name="/get_pickup_task"
-                      manipulator_id="{manipulator_id}"/>
-
-      <!-- 2. Převeďte ID manipulátoru na souřadnice -->
-      <LookupPose location_id="{manipulator_id}"
-                  x="{goal_x}" y="{goal_y}"/>
-
-      <!-- 3. Navigujte k manipulátoru -->
-      <NavigateToPoseAction action_name="/go_to_goal"
-                            x="{goal_x}" y="{goal_y}"/>
-
-      <!-- TODO: Doplňte zbytek mise:
-           4. Potvrzení nakládky (ConfirmLoadingService)
-           5. Zjištění cílového skladu (GetDropoffService)
-           6. Převod ID skladu na souřadnice (LookupPose)
-           7. Navigace do skladu (NavigateToPoseAction)
-           8. Návrat na startovní pozici [0, 0] (NavigateToPoseAction)
-      -->
-
-    </Sequence>
-  </BehaviorTree>
-
+    <BehaviorTree ID="WarehouseMission">
+        <Sequence name="main_mission">
+            
+            <GetTaskService service_name="/get_pickup_task"
+                            manipulator_id="{manipulator_id}"/>
+                            
+                            
+                            <!-- {manip_id} --->
+            <LookupPose location_id="1" 
+                        x="{goal_x}" y="{goal_y}"/>
+                        
+            <NavigateToPoseAction action_name="/go_to_goal"
+                                  x="{goal_x}" y="{goal_y}"/>
+                                  
+            <ConfirmLoadingService service_name="/confirm_loading"/>
+            
+            <GetDropoffService service_name="/get_dropoff_location"
+                               storage_id="{storage_id}"/>
+                               
+                               
+                           <!-- {storage_id} --->
+            <LookupPose location_id="A1" 
+                        x="{goal_x}" y="{goal_y}"/>
+                        
+            <NavigateToPoseAction action_name="/go_to_goal"
+                                  x="{goal_x}" y="{goal_y}"/>
+                                  
+            <NavigateToPoseAction action_name="/go_to_goal"
+                                  x="-0.5" y="0.0"/>
+                                  
+        </Sequence>
+    </BehaviorTree>
 </root>

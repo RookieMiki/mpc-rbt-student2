@@ -23,9 +23,9 @@
   <depend>mpc_rbt_simulator</depend>
 
   <!-- TODO (Lab 08): Odkomentujte následující závislosti pro behavior trees -->
-  <!-- <depend>std_srvs</depend> -->
-  <!-- <depend>behaviortree_cpp</depend> -->
-  <!-- <depend>behaviortree_ros2</depend> -->
+   <depend>std_srvs</depend> 
+  <depend>behaviortree_cpp</depend> 
+  <depend>behaviortree_ros2</depend> 
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

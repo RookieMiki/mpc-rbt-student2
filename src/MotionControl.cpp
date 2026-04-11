@@ -127,8 +127,8 @@ void MotionControlNode::updateTwist() {
     while (xte > M_PI) xte -= 2.0 * M_PI;
     while (xte < -M_PI) xte += 2.0 * M_PI;
 
-    // Výpočet povelů pro motory (přesně podle nápovědy v kostře)
-    double P = 1.0;     // Proporcionální konstanta - určuje agresivitu zatáčení (možná budeš muset ladit)
+    // Výpočet povelů pro motory 
+    double P = 1.0;     // Proporcionální konstanta - určuje agresivitu zatáčení 
     double v_max = 0.2; // Rychlost jízdy vpřed [m/s]
     
     geometry_msgs::msg::Twist twist;
