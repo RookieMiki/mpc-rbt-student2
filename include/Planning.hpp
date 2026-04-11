@@ -9,6 +9,7 @@
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "nav_msgs/srv/get_map.hpp"
 #include "nav_msgs/srv/get_plan.hpp"
+#include <nav_msgs/msg/odometry.hpp>
 
 // A-star cell structure
 struct Cell {
@@ -25,7 +26,9 @@ public:
 
 private:
     // Parameters
-    // TO DO
+    double current_robot_x_ = 0.0;
+    double current_robot_y_ = 0.0;
+    bool has_robot_pose_ = false; // Pojistka, abychom neplánovali dřív, než známe polohu
 
     // Callbacks
     void mapCallback(rclcpp::Client<nav_msgs::srv::GetMap>::SharedFuture future);
@@ -39,6 +42,9 @@ private:
 
     // Publishers
     rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub_;
+
+    // Subscribers
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
 
     // Methods
     void dilateMap();

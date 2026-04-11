@@ -10,8 +10,8 @@
 using namespace std::chrono_literals;
 
 KeyboardControlNode::KeyboardControlNode() : rclcpp::Node("keyboard_control_node") {
-    this->declare_parameter("linear_speed", 0.5);
-    this->declare_parameter("angular_speed", 0.5);
+    this->declare_parameter("linear_speed", 1.3);
+    this->declare_parameter("angular_speed", 1.0);
 
     twist_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
 

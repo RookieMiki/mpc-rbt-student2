@@ -16,7 +16,7 @@ public:
 private:
     void jointCallback(const sensor_msgs::msg::JointState & msg);
 
-    void updateOdometry(double left_wheel_vel, double right_wheel_vel, double dt);
+    void updateOdometry(double left_wheel_vel, double right_wheel_vel, double dt, rclcpp::Time stamp);
     void publishOdometry();
     void publishTransform();
 
