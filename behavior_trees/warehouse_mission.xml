@@ -7,7 +7,7 @@
                             
                             
                             <!-- {manip_id} --->
-            <LookupPose location_id="1" 
+            <LookupPose location_id="{manipulator_id}" 
                         x="{goal_x}" y="{goal_y}"/>
                         
             <NavigateToPoseAction action_name="/go_to_goal"
@@ -20,7 +20,7 @@
                                
                                
                            <!-- {storage_id} --->
-            <LookupPose location_id="A1" 
+            <LookupPose location_id="{storage_id}" 
                         x="{goal_x}" y="{goal_y}"/>
                         
             <NavigateToPoseAction action_name="/go_to_goal"

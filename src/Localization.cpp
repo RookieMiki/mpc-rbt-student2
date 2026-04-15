@@ -45,7 +45,7 @@ void LocalizationNode::jointCallback(const sensor_msgs::msg::JointState & msg) {
         dt = 0.01; 
     }
     
-    RCLCPP_INFO(this->get_logger(), "L: %.2f, R: %.2f, dt: %.4f", msg.velocity[0], msg.velocity[1], dt);
+    //RCLCPP_INFO(this->get_logger(), "L: %.2f, R: %.2f, dt: %.4f", msg.velocity[0], msg.velocity[1], dt);
 
     // Výpočty
     updateOdometry(left_vel, right_vel, dt, msg.header.stamp);
