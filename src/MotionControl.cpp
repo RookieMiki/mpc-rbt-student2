@@ -129,7 +129,7 @@ void MotionControlNode::updateTwist() {
 
     // Výpočet povelů pro motory 
     double P = 1.0;     // Proporcionální konstanta - určuje agresivitu zatáčení 
-    double v_max = 0.2; // Rychlost jízdy vpřed [m/s]
+    double v_max = 0.15; // Rychlost jízdy vpřed [m/s]
     
     geometry_msgs::msg::Twist twist;
     twist.angular.z = P * xte;
