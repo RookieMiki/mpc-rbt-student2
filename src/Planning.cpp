@@ -88,7 +88,7 @@ void PlanningNode::dilateMap() {
     float resolution = map_.info.resolution;
 
     // Spočítáme, o kolik buněk (pixelů) chceme překážky zvětšit
-    double robot_radius = robot_config::HALF_DISTANCE_BETWEEN_WHEELS + 0.13; // Poloměr robota v metrech + nějaká rezerva
+    double robot_radius = robot_config::HALF_DISTANCE_BETWEEN_WHEELS + 0.15; // Poloměr robota v metrech + nějaká rezerva
     int inflation_cells = std::ceil(robot_radius / resolution);
 
     // Projdeme úplně všechny buňky (pixely) v původní mapě

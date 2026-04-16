@@ -51,8 +51,8 @@ def generate_launch_description():
         output='screen',
         prefix='xterm -e',
         parameters=[{
-            'linear_speed': 1.3,
-            'angular_speed': 1.0,
+            'linear_speed': 1.0,
+            'angular_speed': 0.35,
             'use_sim_time': True
         }]
     )
@@ -91,6 +91,6 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name='static_transform_publisher',
-            arguments=['0', '0.0', '0', '0', '0', '0', 'map', 'odom']
+            arguments=['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', 'map', 'odom']
         )
     ])

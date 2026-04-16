@@ -32,10 +32,14 @@ public:
 
         // Naplnění goal.pose
         goal.pose.header.frame_id = "map";
+        goal.pose.header.stamp = node_.lock()->now();
         goal.pose.pose.position.x = x_res.value();
         goal.pose.pose.position.y = y_res.value();
         goal.pose.pose.orientation.w = 1.0;
 
+
+        RCLCPP_INFO(logger(), "NavigateToPoseAction: Sending goal [%.2f, %.2f]",
+                    x_res.value(), y_res.value());
         return true;
     }
 

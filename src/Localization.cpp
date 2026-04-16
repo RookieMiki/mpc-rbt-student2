@@ -30,6 +30,7 @@ LocalizationNode::LocalizationNode() :
     RCLCPP_INFO(get_logger(), "Localization node started.");
 }
 
+/*
 void LocalizationNode::jointCallback(const sensor_msgs::msg::JointState & msg) {
     static rclcpp::Time last_time = msg.header.stamp;
     rclcpp::Time current_time = msg.header.stamp;
@@ -56,6 +57,45 @@ void LocalizationNode::jointCallback(const sensor_msgs::msg::JointState & msg) {
     publishOdometry();
     publishTransform();
 }
+*/
+
+void LocalizationNode::jointCallback(const sensor_msgs::msg::JointState & msg) {
+    rclcpp::Time current_time = msg.header.stamp;
+
+    // 1. Ochrana pro úplně první zprávu po startu nodu
+    // Pokud je last_time_ nula (přednastavená hodnota), jen ji uložíme a končíme
+    if (last_time_.nanoseconds() == 0) {
+        last_time_ = current_time;
+        return;
+    }
+
+    // 2. Výpočet skutečného dt
+    double dt = (current_time - last_time_).seconds();
+
+    // 3. Ochrana proti restartu simulace nebo chybám v čase
+    // Pokud je dt záporné (restart) nebo podezřele malé, přeskočíme krok
+    if (dt <= 0.0) {
+        last_time_ = current_time;
+        return;
+    }
+    
+    // Ochrana proti extrémně velkému dt (např. lag v simulaci)
+    if (dt > 0.5) { 
+        dt = 0.01; // Nouzová hodnota, aby robot neodletěl pryč
+    }
+
+    double right_vel = msg.velocity[0]; 
+    double left_vel = msg.velocity[1];
+
+    // Výpočty odometrie
+    updateOdometry(left_vel, right_vel, dt, msg.header.stamp);
+    
+    // Uložíme čas pro příští výpočet (používáme členskou proměnnou třídy)
+    last_time_ = current_time;
+
+    publishOdometry();
+    publishTransform();
+}
 
 void LocalizationNode::updateOdometry(double left_wheel_vel, double right_wheel_vel, double dt, rclcpp::Time stamp) {
     odometry_.header.stamp = stamp; 
@@ -72,9 +112,14 @@ void LocalizationNode::updateOdometry(double left_wheel_vel, double right_wheel_
     tf2::Matrix3x3(tf_quat).getRPY(roll, pitch, theta);
 
     // Integrace - výpočet nové pozice a úhlu
-    double delta_x = linear * std::cos(theta) * dt;
-    double delta_y = linear * std::sin(theta) * dt;
+    //double delta_x = linear * std::cos(theta) * dt;
+    //double delta_y = linear * std::sin(theta) * dt;
     double delta_theta = angular * dt;
+    
+    // Místo std::cos(theta) použij střední úhel:
+    double avg_theta = theta + (delta_theta / 2.0); 
+    double delta_x = linear * std::cos(avg_theta) * dt;
+    double delta_y = linear * std::sin(avg_theta) * dt;
 
     double new_x = odometry_.pose.pose.position.x + delta_x;
     double new_y = odometry_.pose.pose.position.y + delta_y;

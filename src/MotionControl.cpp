@@ -127,20 +127,30 @@ void MotionControlNode::updateTwist() {
     while (xte > M_PI) xte -= 2.0 * M_PI;
     while (xte < -M_PI) xte += 2.0 * M_PI;
 
-    // Výpočet povelů pro motory 
-    double P = 1.0;     // Proporcionální konstanta - určuje agresivitu zatáčení 
-    double v_max = 0.15; // Rychlost jízdy vpřed [m/s]
-    
+    double P = 0.7;     
+    double v_max = 0.2; 
+    double w_max = 0.5; // MAXIMÁLNÍ povolená rychlost otáčení [rad/s]
+
     geometry_msgs::msg::Twist twist;
     twist.angular.z = P * xte;
-    twist.linear.x = v_max;
+
+    // Oříznutí úhlové rychlosti, aby sebou robot tolik necukal a kola neklouzala
+    if (twist.angular.z > w_max) twist.angular.z = w_max;
+    if (twist.angular.z < -w_max) twist.angular.z = -w_max;
+
+    // Logika pro prioritizaci rotace
+    if (std::abs(xte) > 0.3) {
+        twist.linear.x = 0.0;
+    } else {
+        twist.linear.x = v_max * std::max(0.0, 1.0 - (std::abs(xte) / 0.5));
+    }
 
     // (Volitelné) Jednoduchá stopka, pokud jsme dostatečně blízko úplného konce trasy
     double final_target_x = path_.poses.back().pose.position.x;
     double final_target_y = path_.poses.back().pose.position.y;
     double dist_to_final = hypot(final_target_x - robot_x, final_target_y - robot_y);
     
-    if (dist_to_final < 0.2) { // Jsme méně než 20 cm od cíle?
+    if (dist_to_final < 0.08) { // Jsme méně než 20 cm od cíle?
         twist.linear.x = 0.0;
         twist.angular.z = 0.0;
     }

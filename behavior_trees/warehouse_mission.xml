@@ -6,7 +6,6 @@
                             manipulator_id="{manipulator_id}"/>
                             
                             
-                            <!-- {manip_id} --->
             <LookupPose location_id="{manipulator_id}" 
                         x="{goal_x}" y="{goal_y}"/>
                         
@@ -19,7 +18,6 @@
                                storage_id="{storage_id}"/>
                                
                                
-                           <!-- {storage_id} --->
             <LookupPose location_id="{storage_id}" 
                         x="{goal_x}" y="{goal_y}"/>
                         
